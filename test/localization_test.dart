@@ -243,5 +243,199 @@ void main() {
 
       expect(controller.currentLanguageCode, equals('mr'));
     });
+
+    testWidgets('LanguageSelector checkmark dynamically moves: English -> Hindi -> Marathi -> English', (tester) async {
+      final controller = LocaleController(
+        dbService: DatabaseService.instance,
+        initialLocale: const Locale('en'),
+      );
+      await tester.runAsync(() => controller.initialize());
+
+      await tester.pumpWidget(
+        AnimatedBuilder(
+          animation: controller,
+          builder: (context, _) {
+            return MaterialApp(
+              locale: controller.currentLocale,
+              supportedLocales: const [
+                Locale('en', ''),
+                Locale('hi', ''),
+                Locale('mr', ''),
+              ],
+              localizationsDelegates: const [
+                AppLocalizationsDelegate(),
+                GlobalMaterialLocalizations.delegate,
+                GlobalWidgetsLocalizations.delegate,
+                GlobalCupertinoLocalizations.delegate,
+              ],
+              home: Scaffold(
+                appBar: AppBar(
+                  actions: [
+                    LanguageSelectorMenu(controller: controller),
+                  ],
+                ),
+                body: const Center(child: Text('Home')),
+              ),
+            );
+          },
+        ),
+      );
+
+      await tester.pumpAndSettle();
+
+      // 1. Initial state: English
+      // Open dropdown
+      await tester.tap(find.byIcon(Icons.language));
+      await tester.pumpAndSettle();
+
+      // Verify all 3 options exist
+      expect(find.text('English'), findsOneWidget);
+      expect(find.text('हिंदी'), findsOneWidget);
+      expect(find.text('मराठी'), findsOneWidget);
+
+      // Exactly ONE checkmark visible
+      expect(find.byIcon(Icons.check_rounded), findsOneWidget);
+
+      // Verify the checkmark is in the English popup item row
+      final englishItemFinder = find.ancestor(
+        of: find.text('English'),
+        matching: find.byType(Row),
+      );
+      expect(
+        find.descendant(of: englishItemFinder, matching: find.byIcon(Icons.check_rounded)),
+        findsOneWidget,
+      );
+
+      final hindiItemFinder = find.ancestor(
+        of: find.text('हिंदी'),
+        matching: find.byType(Row),
+      );
+      expect(
+        find.descendant(of: hindiItemFinder, matching: find.byIcon(Icons.check_rounded)),
+        findsNothing,
+      );
+
+      final marathiItemFinder = find.ancestor(
+        of: find.text('मराठी'),
+        matching: find.byType(Row),
+      );
+      expect(
+        find.descendant(of: marathiItemFinder, matching: find.byIcon(Icons.check_rounded)),
+        findsNothing,
+      );
+
+      // 2. Select Hindi (English -> Hindi)
+      await tester.tap(find.text('हिंदी'));
+      await tester.runAsync(() => Future<void>.delayed(const Duration(milliseconds: 100)));
+      await tester.pumpAndSettle();
+
+      expect(controller.currentLanguageCode, equals('hi'));
+
+      // Reopen dropdown
+      await tester.tap(find.byIcon(Icons.language));
+      await tester.pumpAndSettle();
+
+      // Exactly ONE checkmark visible
+      expect(find.byIcon(Icons.check_rounded), findsOneWidget);
+
+      // Checkmark must be next to Hindi only
+      expect(
+        find.descendant(
+          of: find.ancestor(of: find.text('हिंदी'), matching: find.byType(Row)),
+          matching: find.byIcon(Icons.check_rounded),
+        ),
+        findsOneWidget,
+      );
+      expect(
+        find.descendant(
+          of: find.ancestor(of: find.text('English'), matching: find.byType(Row)),
+          matching: find.byIcon(Icons.check_rounded),
+        ),
+        findsNothing,
+      );
+      expect(
+        find.descendant(
+          of: find.ancestor(of: find.text('मराठी'), matching: find.byType(Row)),
+          matching: find.byIcon(Icons.check_rounded),
+        ),
+        findsNothing,
+      );
+
+      // 3. Select Marathi (Hindi -> Marathi)
+      await tester.tap(find.text('मराठी'));
+      await tester.runAsync(() => Future<void>.delayed(const Duration(milliseconds: 100)));
+      await tester.pumpAndSettle();
+
+      expect(controller.currentLanguageCode, equals('mr'));
+
+      // Reopen dropdown
+      await tester.tap(find.byIcon(Icons.language));
+      await tester.pumpAndSettle();
+
+      // Exactly ONE checkmark visible
+      expect(find.byIcon(Icons.check_rounded), findsOneWidget);
+
+      // Checkmark must be next to Marathi only
+      expect(
+        find.descendant(
+          of: find.ancestor(of: find.text('मराठी'), matching: find.byType(Row)),
+          matching: find.byIcon(Icons.check_rounded),
+        ),
+        findsOneWidget,
+      );
+      expect(
+        find.descendant(
+          of: find.ancestor(of: find.text('English'), matching: find.byType(Row)),
+          matching: find.byIcon(Icons.check_rounded),
+        ),
+        findsNothing,
+      );
+      expect(
+        find.descendant(
+          of: find.ancestor(of: find.text('हिंदी'), matching: find.byType(Row)),
+          matching: find.byIcon(Icons.check_rounded),
+        ),
+        findsNothing,
+      );
+
+      // 4. Select English (Marathi -> English)
+      await tester.tap(find.text('English'));
+      await tester.runAsync(() => Future<void>.delayed(const Duration(milliseconds: 100)));
+      await tester.pumpAndSettle();
+
+      expect(controller.currentLanguageCode, equals('en'));
+
+      // Reopen dropdown
+      await tester.tap(find.byIcon(Icons.language));
+      await tester.pumpAndSettle();
+
+      // Exactly ONE checkmark visible next to English
+      expect(find.byIcon(Icons.check_rounded), findsOneWidget);
+      expect(
+        find.descendant(
+          of: find.ancestor(of: find.text('English'), matching: find.byType(Row)),
+          matching: find.byIcon(Icons.check_rounded),
+        ),
+        findsOneWidget,
+      );
+      expect(
+        find.descendant(
+          of: find.ancestor(of: find.text('हिंदी'), matching: find.byType(Row)),
+          matching: find.byIcon(Icons.check_rounded),
+        ),
+        findsNothing,
+      );
+      expect(
+        find.descendant(
+          of: find.ancestor(of: find.text('मराठी'), matching: find.byType(Row)),
+          matching: find.byIcon(Icons.check_rounded),
+        ),
+        findsNothing,
+      );
+
+      // Close menu
+      await tester.tap(find.text('English'));
+      await tester.pumpAndSettle();
+    });
   });
 }

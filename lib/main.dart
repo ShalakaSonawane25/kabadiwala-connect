@@ -15,9 +15,11 @@ import 'screens/splash/splash_screen.dart';
 import 'screens/lot/lot_details_screen.dart';
 import 'screens/recycler/recycler_handover_screen.dart';
 import 'screens/recycler/recycler_matching_screen.dart';
+import 'screens/handover/handover_qr_screen.dart';
 import 'screens/safety/safety_screen.dart';
 import 'screens/notifications/notifications_screen.dart';
 import 'models/e_waste_lot.dart';
+import 'models/recycler.dart';
 
 import 'repositories/lot_repository.dart';
 import 'repositories/price_repository.dart';
@@ -139,6 +141,27 @@ class KabadiwalaConnectApp extends StatelessWidget {
                   builder: (context) => LotDetailsScreen(lot: lot),
                 );
               case '/recycler-handover':
+                final args = settings.arguments;
+                EWasteLot? lot;
+                Recycler? recycler;
+                if (args is EWasteLot) {
+                  lot = args;
+                } else if (args is Map<String, dynamic>) {
+                  lot = args['lot'] as EWasteLot?;
+                  recycler = args['recycler'] as Recycler?;
+                } else if (args is Recycler) {
+                  recycler = args;
+                }
+                return MaterialPageRoute(
+                  settings: settings,
+                  builder: (context) => HandoverQrScreen(
+                    lot: lot,
+                    recycler: recycler,
+                    lotRepository: lotRepository,
+                    transactionRepository: transactionRepository,
+                  ),
+                );
+              case '/handover-payment':
                 final lot = settings.arguments as EWasteLot;
                 return MaterialPageRoute(
                   settings: settings,

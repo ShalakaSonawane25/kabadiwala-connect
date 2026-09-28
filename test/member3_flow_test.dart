@@ -532,14 +532,16 @@ void main() {
       final count = await notificationService.checkPriceAlertsAgainstPrices(prices);
       expect(count, equals(1));
 
-      // Verify notification in SQLite
+      // Verify notification in SQLite (1 created on setup + 1 on target reached)
       final notifs = await dbService.getNotifications();
-      expect(notifs.length, equals(1));
-      expect(notifs.first.type, equals(AppConstants.notificationPriceAlert));
-      expect(notifs.first.isRead, isFalse);
+      expect(notifs.length, equals(2));
+      expect(notifs.every((n) => n.type == AppConstants.notificationPriceAlert), isTrue);
+      expect(notifs.every((n) => !n.isRead), isTrue);
 
       // Mark as read
-      await notificationService.markAsRead(notifs.first.id);
+      for (final n in notifs) {
+        await notificationService.markAsRead(n.id);
+      }
       final unreadCount = await notificationService.getUnreadCount();
       expect(unreadCount, equals(0));
     });

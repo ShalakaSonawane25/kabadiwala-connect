@@ -27,10 +27,18 @@ class LocaleController extends ChangeNotifier {
     SupportedLanguage(code: 'mr', nativeName: 'मराठी', englishName: 'Marathi'),
   ];
 
+  static String normalizeCode(String? code) {
+    if (code == null) return 'en';
+    final normalized = code.toLowerCase().trim();
+    if (normalized.startsWith('hi')) return 'hi';
+    if (normalized.startsWith('mr')) return 'mr';
+    return 'en';
+  }
+
   LocaleController({DatabaseService? dbService, Locale? initialLocale})
       : _dbService = dbService ?? DatabaseService.instance {
     if (initialLocale != null) {
-      _locale = initialLocale;
+      _locale = Locale(normalizeCode(initialLocale.languageCode));
       _isInitialized = true;
     }
   }
@@ -49,7 +57,7 @@ class LocaleController extends ChangeNotifier {
     if (_isInitialized) return;
     try {
       final savedLang = await _dbService.getLanguagePreference(defaultLanguage: 'en');
-      _locale = Locale(savedLang);
+      _locale = Locale(normalizeCode(savedLang));
     } catch (_) {
       _locale = const Locale('en');
     } finally {
@@ -60,12 +68,13 @@ class LocaleController extends ChangeNotifier {
 
   /// Changes the application language and immediately persists to SQLite
   Future<void> setLanguageCode(String languageCode) async {
-    if (_locale.languageCode == languageCode) return;
-    _locale = Locale(languageCode);
+    final normalized = normalizeCode(languageCode);
+    if (_locale.languageCode == normalized) return;
+    _locale = Locale(normalized);
     notifyListeners();
 
     try {
-      await _dbService.saveLanguagePreference(languageCode);
+      await _dbService.saveLanguagePreference(normalized);
     } catch (_) {}
   }
 

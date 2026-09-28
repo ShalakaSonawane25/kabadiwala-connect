@@ -9,6 +9,7 @@ import '../../models/e_waste_lot.dart';
 import '../../repositories/lot_repository.dart';
 import '../../repositories/transaction_repository.dart';
 import '../../services/connectivity_service.dart';
+import '../../services/notification_service.dart';
 import '../../services/sync_service.dart';
 import '../../widgets/custom_button.dart';
 import '../../widgets/kabadiwala_logo.dart';
@@ -23,6 +24,7 @@ class HomeScreen extends StatefulWidget {
   final TransactionRepository? transactionRepository;
   final SyncService? syncService;
   final ConnectivityService? connectivityService;
+  final NotificationService? notificationService;
 
   const HomeScreen({
     super.key,
@@ -32,6 +34,7 @@ class HomeScreen extends StatefulWidget {
     this.transactionRepository,
     this.syncService,
     this.connectivityService,
+    this.notificationService,
   });
 
   @override
@@ -43,15 +46,18 @@ class _HomeScreenState extends State<HomeScreen> {
   late final TransactionRepository _transactionRepository;
   late final SyncService _syncService;
   late final ConnectivityService _connectivityService;
+  late final NotificationService _notificationService;
 
   List<EWasteLot> _lots = [];
   double _totalEarnings = 0.0;
+  int _unreadNotificationCount = 0;
   bool _isLoading = false;
   bool _isOnline = true;
   SyncStatus _syncStatus = SyncStatus.idle;
 
   StreamSubscription<bool>? _connectivitySub;
   StreamSubscription<SyncStatus>? _syncSub;
+  StreamSubscription<int>? _unreadNotifSub;
 
   @override
   void initState() {
@@ -60,6 +66,7 @@ class _HomeScreenState extends State<HomeScreen> {
     _transactionRepository = widget.transactionRepository ?? TransactionRepository();
     _syncService = widget.syncService ?? SyncService.getInstance();
     _connectivityService = widget.connectivityService ?? ConnectivityService.instance;
+    _notificationService = widget.notificationService ?? NotificationService.instance;
     _initListeners();
     _loadData();
   }
@@ -69,6 +76,14 @@ class _HomeScreenState extends State<HomeScreen> {
       if (mounted) {
         setState(() {
           _isOnline = online;
+        });
+      }
+    });
+
+    _unreadNotifSub = _notificationService.unreadCountStream.listen((count) {
+      if (mounted) {
+        setState(() {
+          _unreadNotificationCount = count;
         });
       }
     });
@@ -99,6 +114,18 @@ class _HomeScreenState extends State<HomeScreen> {
   Future<void> _loadData() async {
     await _loadLots();
     await _loadEarnings();
+    await _loadNotificationCount();
+  }
+
+  Future<void> _loadNotificationCount() async {
+    try {
+      final count = await _notificationService.getUnreadCount();
+      if (mounted) {
+        setState(() {
+          _unreadNotificationCount = count;
+        });
+      }
+    } catch (_) {}
   }
 
   Future<void> _loadLots() async {
@@ -408,10 +435,27 @@ class _HomeScreenState extends State<HomeScreen> {
     );
   }
 
+  String _getActiveLanguageCode(BuildContext context) {
+    final ctrlCode = LocaleController.normalizeCode(LocaleController.instance.currentLanguageCode);
+    if (ctrlCode == 'hi' || ctrlCode == 'mr') {
+      return ctrlCode;
+    }
+    if (ctrlCode == 'en') {
+      return 'en';
+    }
+    try {
+      final locCode = Localizations.localeOf(context).languageCode;
+      return LocaleController.normalizeCode(locCode);
+    } catch (_) {
+      return 'en';
+    }
+  }
+
   void _showLanguageDialog(BuildContext context, AppLocalizations loc) {
+    final activeCode = _getActiveLanguageCode(context);
     showDialog<void>(
       context: context,
-      builder: (context) => AlertDialog(
+      builder: (dialogContext) => AlertDialog(
         shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
         title: Row(
           children: [
@@ -423,7 +467,7 @@ class _HomeScreenState extends State<HomeScreen> {
         content: Column(
           mainAxisSize: MainAxisSize.min,
           children: LocaleController.supportedLanguages.map((lang) {
-            final isSelected = lang.code == widget.currentLocale.languageCode;
+            final isSelected = lang.code == activeCode;
             return ListTile(
               title: Text(
                 lang.nativeName,
@@ -434,18 +478,22 @@ class _HomeScreenState extends State<HomeScreen> {
               ),
               subtitle: Text(lang.englishName),
               trailing: isSelected
-                  ? const Icon(Icons.check_circle_rounded, color: AppColors.primary)
+                  ? const Icon(Icons.check_rounded, color: AppColors.primary)
                   : null,
-              onTap: () {
-                widget.onLanguageChanged(Locale(lang.code, ''));
-                Navigator.pop(context);
+              onTap: () async {
+                final normalized = LocaleController.normalizeCode(lang.code);
+                await LocaleController.instance.setLanguageCode(normalized);
+                widget.onLanguageChanged(Locale(normalized, ''));
+                if (dialogContext.mounted) {
+                  Navigator.pop(dialogContext);
+                }
               },
             );
           }).toList(),
         ),
         actions: [
           TextButton(
-            onPressed: () => Navigator.pop(context),
+            onPressed: () => Navigator.pop(dialogContext),
             child: const Text('OK', style: TextStyle(fontWeight: FontWeight.bold)),
           ),
         ],
@@ -457,6 +505,7 @@ class _HomeScreenState extends State<HomeScreen> {
   void dispose() {
     _connectivitySub?.cancel();
     _syncSub?.cancel();
+    _unreadNotifSub?.cancel();
     super.dispose();
   }
 
@@ -482,13 +531,24 @@ class _HomeScreenState extends State<HomeScreen> {
         ),
         actions: [
           IconButton(
-            icon: const Icon(Icons.notifications_rounded),
+            icon: Badge(
+              isLabelVisible: _unreadNotificationCount > 0,
+              label: Text(
+                '$_unreadNotificationCount',
+                style: const TextStyle(fontSize: 10, fontWeight: FontWeight.bold),
+              ),
+              child: const Icon(Icons.notifications_rounded),
+            ),
             tooltip: loc.translate('notifications'),
-            onPressed: () {
-              Navigator.pushNamed(context, '/notifications');
+            onPressed: () async {
+              await Navigator.pushNamed(context, '/notifications');
+              _loadNotificationCount();
             },
           ),
-          const LanguageSelectorMenu(),
+          LanguageSelectorMenu(
+            controller: LocaleController.instance,
+            onLanguageChanged: widget.onLanguageChanged,
+          ),
           const SizedBox(width: 8),
         ],
       ),
@@ -607,11 +667,19 @@ class _HomeScreenState extends State<HomeScreen> {
                     },
                   ),
                   ListTile(
-                    leading: const Icon(Icons.notifications_rounded, color: AppColors.textPrimary),
+                    leading: Badge(
+                      isLabelVisible: _unreadNotificationCount > 0,
+                      label: Text(
+                        '$_unreadNotificationCount',
+                        style: const TextStyle(fontSize: 10, fontWeight: FontWeight.bold),
+                      ),
+                      child: const Icon(Icons.notifications_rounded, color: AppColors.textPrimary),
+                    ),
                     title: Text(loc.translate('notifications')),
-                    onTap: () {
+                    onTap: () async {
                       Navigator.pop(context);
-                      Navigator.pushNamed(context, '/notifications');
+                      await Navigator.pushNamed(context, '/notifications');
+                      _loadNotificationCount();
                     },
                   ),
                   const Divider(height: 16),
@@ -620,8 +688,10 @@ class _HomeScreenState extends State<HomeScreen> {
                     title: Text(loc.translate('language')),
                     trailing: Text(
                       LocaleController.supportedLanguages
-                          .firstWhere((l) => l.code == widget.currentLocale.languageCode,
-                              orElse: () => LocaleController.supportedLanguages.first)
+                          .firstWhere(
+                            (l) => l.code == _getActiveLanguageCode(context),
+                            orElse: () => LocaleController.supportedLanguages.first,
+                          )
                           .nativeName,
                       style: const TextStyle(
                         color: AppColors.primary,

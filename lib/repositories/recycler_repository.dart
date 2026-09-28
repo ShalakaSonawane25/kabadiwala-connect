@@ -30,16 +30,47 @@ class RecyclerRepository {
         _apiService = apiService ?? RemoteApiService(),
         _connectivityService = connectivityService ?? ConnectivityService.instance;
 
+  static String normalizeCategoryId(String? input) {
+    if (input == null || input.isEmpty || input == 'all' || input == 'E-Waste') {
+      return 'all';
+    }
+    final lower = input.toLowerCase().trim();
+    if (lower.contains('pcb') || lower.contains('motherboard')) return 'pcb';
+    if (lower.contains('copper') || lower.contains('wire') || lower.contains('तार')) return 'copper_wire';
+    if (lower.contains('battery') || lower.contains('batteries') || lower.contains('बैटरी') || lower.contains('बॅटरी')) return 'battery';
+    if (lower.contains('display') || lower.contains('monitor') || lower.contains('स्क्रीन')) return 'display';
+    if (lower.contains('appliance') || lower.contains('electrical') || lower.contains('heavy')) return 'appliances';
+    if (lower.contains('mixed') || lower.contains('मिश्रित')) return 'mixed';
+    return lower;
+  }
+
+  static bool matchesCategory(Recycler r, String? targetCategory) {
+    final norm = normalizeCategoryId(targetCategory);
+    if (norm == 'all' || norm == 'mixed' || norm.isEmpty) return true;
+    if (r.acceptedCategories.isEmpty ||
+        r.acceptedCategories.contains('mixed') ||
+        r.acceptedCategories.contains('all')) {
+      return true;
+    }
+    return r.acceptedCategories.any((cat) {
+      final normCat = normalizeCategoryId(cat);
+      return normCat == norm || normCat == 'mixed' || normCat == 'all';
+    });
+  }
+
   Future<RecyclerResult> fetchMatchingRecyclers({
     String? categoryId,
     bool forceRefresh = false,
   }) async {
     final isOnline = await _connectivityService.isConnected();
+    final normCategory = normalizeCategoryId(categoryId);
 
     if (isOnline && forceRefresh) {
       try {
-        final apiResponse = await _apiService.fetchMatchingRecyclers(categoryId: categoryId);
-        if (apiResponse.success && apiResponse.data != null) {
+        final apiResponse = await _apiService.fetchMatchingRecyclers(
+          categoryId: normCategory == 'all' ? null : normCategory,
+        );
+        if (apiResponse.success && apiResponse.data != null && apiResponse.data!.isNotEmpty) {
           await _dbService.insertRecyclers(apiResponse.data!);
           return RecyclerResult(recyclers: apiResponse.data!, isOffline: false);
         }
@@ -50,20 +81,19 @@ class RecyclerRepository {
 
     // Local SQLite retrieval
     try {
-      List<Recycler> localRecyclers;
-      if (categoryId != null && categoryId.isNotEmpty && categoryId != 'all') {
-        localRecyclers = await _dbService.getMatchingRecyclers(categoryId);
-      } else {
-        localRecyclers = await _dbService.getRecyclers();
-      }
+      List<Recycler> localRecyclers = await _dbService.getRecyclers();
 
-      // If local cache is empty, fetch from API or seed initial benchmark dataset
+      // If local cache is empty, fetch from API / seed benchmark dataset
       if (localRecyclers.isEmpty) {
-        final apiResponse = await _apiService.fetchMatchingRecyclers(categoryId: categoryId);
-        if (apiResponse.success && apiResponse.data != null) {
+        final apiResponse = await _apiService.fetchMatchingRecyclers(categoryId: null);
+        if (apiResponse.success && apiResponse.data != null && apiResponse.data!.isNotEmpty) {
           await _dbService.insertRecyclers(apiResponse.data!);
           localRecyclers = apiResponse.data!;
         }
+      }
+
+      if (normCategory != 'all' && normCategory.isNotEmpty) {
+        localRecyclers = localRecyclers.where((r) => matchesCategory(r, normCategory)).toList();
       }
 
       // Rank/sort recyclers: Authorized first, then by ascending distance

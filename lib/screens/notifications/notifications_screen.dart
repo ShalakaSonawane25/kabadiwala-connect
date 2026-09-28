@@ -75,11 +75,8 @@ class _NotificationsScreenState extends State<NotificationsScreen> {
   }
 
   void _onNotificationTapped(AppNotification item) {
-    // Attempt background mark-as-read without blocking or failing navigation
-    try {
-      _notificationService.markAsRead(item.id);
-      _loadNotifications();
-    } catch (_) {}
+    // Attempt background mark-as-read without blocking navigation
+    unawaited(_notificationService.markAsRead(item.id));
 
     if (!mounted) return;
 

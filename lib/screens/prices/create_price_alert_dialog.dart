@@ -9,6 +9,7 @@ Future<void> showSetPriceAlertDialog(
   required double currentPrice,
 }) async {
   final loc = AppLocalizations.of(context);
+  final messenger = ScaffoldMessenger.maybeOf(context);
   final controller = TextEditingController(
     text: (currentPrice * 1.1).round().toString(),
   );
@@ -67,19 +68,19 @@ Future<void> showSetPriceAlertDialog(
             onPressed: () async {
               final target = double.tryParse(controller.text.trim());
               if (target != null && target > 0) {
-                await NotificationService().createPriceAlert(
+                await NotificationService.instance.createPriceAlert(
                   material: material,
                   targetPrice: target,
                 );
                 if (ctx.mounted) {
                   Navigator.pop(ctx);
-                  ScaffoldMessenger.of(context).showSnackBar(
-                    SnackBar(
-                      content: Text('Price alert set for $material at ₹$target/kg'),
-                      backgroundColor: AppColors.primary,
-                    ),
-                  );
                 }
+                messenger?.showSnackBar(
+                  SnackBar(
+                    content: Text('Price alert set for $material at ₹${target.toStringAsFixed(0)}/kg'),
+                    backgroundColor: AppColors.primary,
+                  ),
+                );
               }
             },
             style: ElevatedButton.styleFrom(

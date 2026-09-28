@@ -153,12 +153,23 @@ void main() {
       expect(find.text('Lot Details'), findsOneWidget);
       expect(find.text('Handover to Recycler'), findsOneWidget);
 
-      // Step 7: Tap "Handover to Recycler" to initiate Recycler Flow Placeholder
+      // Step 7: Tap "Handover to Recycler" to initiate Recycler Flow with QR / Scanner
       await tester.ensureVisible(find.text('Handover to Recycler'));
       await tester.pumpAndSettle();
       await tester.tap(find.text('Handover to Recycler'));
-      await tester.runAsync(() => Future<void>.delayed(const Duration(milliseconds: 200)));
+      await tester.runAsync(() => Future<void>.delayed(const Duration(milliseconds: 300)));
       await tester.pump();
+      await tester.runAsync(() => Future<void>.delayed(const Duration(milliseconds: 300)));
+      await tester.pumpAndSettle();
+
+      // Handover QR / Scanner screen is displayed
+      expect(find.text('Ready for Handover'), findsOneWidget);
+      expect(find.text('Scan QR'), findsWidgets);
+
+      // Proceed to detailed payment & weight confirmation form
+      final paymentFormBtn = find.widgetWithText(OutlinedButton, 'Handover to Recycler');
+      await tester.ensureVisible(paymentFormBtn);
+      await tester.tap(paymentFormBtn);
       await tester.pumpAndSettle();
 
       expect(find.text('Select Authorized Recycler'), findsOneWidget);

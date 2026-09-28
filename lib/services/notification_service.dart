@@ -33,6 +33,11 @@ class NotificationService {
     _instance = instance;
   }
 
+  static void resetForTesting() {
+    _instance?.dispose();
+    _instance = null;
+  }
+
   static NotificationService get instance =>
       _instance ?? NotificationService();
 
@@ -80,30 +85,58 @@ class NotificationService {
   // ==========================================
 
   Future<PriceAlert> createPriceAlert({
+    String? id,
     String? categoryId,
     String? categoryName,
     String? material,
     required double targetPrice,
     String unit = 'kg',
   }) async {
+    final alertId = id ?? _uuid.v4();
     final catId = categoryId ?? material?.toLowerCase().replaceAll(' ', '_') ?? 'material';
     final catName = categoryName ?? material ?? 'E-Waste';
+    final now = DateTime.now();
 
     final alert = PriceAlert(
-      id: _uuid.v4(),
+      id: alertId,
       categoryId: catId,
       categoryName: catName,
       targetPrice: targetPrice,
       unit: unit,
-      createdAt: DateTime.now(),
+      createdAt: now,
       isActive: true,
     );
 
+    // 1. Save the price alert into SQLite
     await _dbService.insertPriceAlert(alert);
 
+    // 2. Create corresponding notification record in SQLite
+    // Using idempotent ID linked to alert ID to avoid duplicate creation
+    final notifId = 'notif_alert_$alertId';
+    final notif = AppNotification(
+      id: notifId,
+      titleEn: '🔔 Price Alert: $catName',
+      titleHi: '🔔 भाव इशारा: $catName',
+      titleMr: '🔔 दर इशारा: $catName',
+      bodyEn: '$catName price alert created at ₹${targetPrice.toStringAsFixed(0)}/$unit. You will be notified when market rates meet your target.',
+      bodyHi: '$catName के लिए ₹${targetPrice.toStringAsFixed(0)}/$unit पर भाव अलर्ट सेट किया गया।',
+      bodyMr: '$catName साठी ₹${targetPrice.toStringAsFixed(0)}/$unit वर दर अलर्ट सेट केला गेला.',
+      type: AppConstants.notificationPriceAlert,
+      relatedId: alertId,
+      timestamp: now,
+      isRead: false,
+      isDemo: true,
+    );
+
+    await _dbService.insertNotification(notif);
+
+    // 3. Inform remote backend if online
     try {
       await _apiService.uploadPriceAlert(alert);
     } catch (_) {}
+
+    // 4. Refresh notification streams reactively
+    await refreshNotifications();
 
     return alert;
   }
