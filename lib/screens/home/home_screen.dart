@@ -11,6 +11,7 @@ import '../../repositories/transaction_repository.dart';
 import '../../services/connectivity_service.dart';
 import '../../services/notification_service.dart';
 import '../../services/sync_service.dart';
+import '../../core/auth/auth_controller.dart';
 import '../../widgets/custom_button.dart';
 import '../../widgets/kabadiwala_logo.dart';
 import '../../widgets/language_selector.dart';
@@ -25,6 +26,7 @@ class HomeScreen extends StatefulWidget {
   final SyncService? syncService;
   final ConnectivityService? connectivityService;
   final NotificationService? notificationService;
+  final AuthController? authController;
 
   const HomeScreen({
     super.key,
@@ -35,6 +37,7 @@ class HomeScreen extends StatefulWidget {
     this.syncService,
     this.connectivityService,
     this.notificationService,
+    this.authController,
   });
 
   @override
@@ -47,6 +50,7 @@ class _HomeScreenState extends State<HomeScreen> {
   late final SyncService _syncService;
   late final ConnectivityService _connectivityService;
   late final NotificationService _notificationService;
+  late final AuthController _authController;
 
   List<EWasteLot> _lots = [];
   double _totalEarnings = 0.0;
@@ -67,6 +71,7 @@ class _HomeScreenState extends State<HomeScreen> {
     _syncService = widget.syncService ?? SyncService.getInstance();
     _connectivityService = widget.connectivityService ?? ConnectivityService.instance;
     _notificationService = widget.notificationService ?? NotificationService.instance;
+    _authController = widget.authController ?? AuthController.instance;
     _initListeners();
     _loadData();
   }
@@ -501,6 +506,56 @@ class _HomeScreenState extends State<HomeScreen> {
     );
   }
 
+  void _showLogoutDialog(BuildContext context, AppLocalizations loc) {
+    showDialog<void>(
+      context: context,
+      builder: (dialogContext) => AlertDialog(
+        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(20)),
+        title: Row(
+          children: [
+            const Icon(Icons.logout_rounded, color: AppColors.error),
+            const SizedBox(width: 8),
+            Text(loc.translate('logoutConfirmTitle')),
+          ],
+        ),
+        content: Text(
+          loc.translate('logoutConfirmMessage'),
+          style: const TextStyle(fontSize: 15, height: 1.3),
+        ),
+        actions: [
+          OutlinedButton(
+            style: OutlinedButton.styleFrom(
+              minimumSize: const Size(90, 44),
+              shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
+            ),
+            onPressed: () => Navigator.pop(dialogContext),
+            child: Text(loc.translate('cancel')),
+          ),
+          ElevatedButton(
+            style: ElevatedButton.styleFrom(
+              backgroundColor: AppColors.error,
+              foregroundColor: Colors.white,
+              minimumSize: const Size(90, 44),
+              shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
+            ),
+            onPressed: () async {
+              Navigator.pop(dialogContext);
+              await _authController.logout();
+              if (context.mounted) {
+                Navigator.pushNamedAndRemoveUntil(
+                  context,
+                  '/login',
+                  (route) => false,
+                );
+              }
+            },
+            child: Text(loc.translate('logout')),
+          ),
+        ],
+      ),
+    );
+  }
+
   @override
   void dispose() {
     _connectivitySub?.cancel();
@@ -545,6 +600,14 @@ class _HomeScreenState extends State<HomeScreen> {
               _loadNotificationCount();
             },
           ),
+          IconButton(
+            icon: const Icon(Icons.account_circle_rounded, size: 28),
+            tooltip: loc.translate('profile'),
+            onPressed: () async {
+              await Navigator.pushNamed(context, '/profile');
+              if (mounted) setState(() {});
+            },
+          ),
           LanguageSelectorMenu(
             controller: LocaleController.instance,
             onLanguageChanged: widget.onLanguageChanged,
@@ -569,30 +632,49 @@ class _HomeScreenState extends State<HomeScreen> {
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  const KabadiwalaLogo(
-                    width: 56,
-                    height: 56,
-                    isCircular: true,
-                    padding: EdgeInsets.all(4.0),
-                    elevation: 2,
-                    fit: BoxFit.contain,
-                  ),
-                  const SizedBox(height: 12),
-                  Text(
-                    loc.translate('appTitle'),
-                    style: const TextStyle(
-                      color: Colors.white,
-                      fontSize: 20,
-                      fontWeight: FontWeight.bold,
-                    ),
-                  ),
-                  const SizedBox(height: 4),
-                  Text(
-                    loc.translate('appTagline'),
-                    style: const TextStyle(
-                      color: Colors.white70,
-                      fontSize: 12,
-                    ),
+                  Row(
+                    children: [
+                      const KabadiwalaLogo(
+                        width: 52,
+                        height: 52,
+                        isCircular: true,
+                        padding: EdgeInsets.all(4.0),
+                        elevation: 2,
+                        fit: BoxFit.contain,
+                      ),
+                      const SizedBox(width: 12),
+                      Expanded(
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            Text(
+                              _authController.currentUser?.name.isNotEmpty == true
+                                  ? _authController.currentUser!.name
+                                  : loc.translate('appTitle'),
+                              style: const TextStyle(
+                                color: Colors.white,
+                                fontSize: 18,
+                                fontWeight: FontWeight.bold,
+                              ),
+                              maxLines: 1,
+                              overflow: TextOverflow.ellipsis,
+                            ),
+                            const SizedBox(height: 2),
+                            Text(
+                              _authController.currentUser?.formattedPhone.isNotEmpty == true
+                                  ? _authController.currentUser!.formattedPhone
+                                  : loc.translate('appTagline'),
+                              style: const TextStyle(
+                                color: Colors.white70,
+                                fontSize: 12,
+                              ),
+                              maxLines: 1,
+                              overflow: TextOverflow.ellipsis,
+                            ),
+                          ],
+                        ),
+                      ),
+                    ],
                   ),
                 ],
               ),
@@ -704,11 +786,32 @@ class _HomeScreenState extends State<HomeScreen> {
                     },
                   ),
                   ListTile(
+                    leading: const Icon(Icons.person_rounded, color: AppColors.textPrimary),
+                    title: Text(loc.translate('profile')),
+                    onTap: () async {
+                      Navigator.pop(context);
+                      await Navigator.pushNamed(context, '/profile');
+                      if (mounted) setState(() {});
+                    },
+                  ),
+                  ListTile(
                     leading: const Icon(Icons.info_outline_rounded, color: AppColors.textPrimary),
                     title: Text(loc.translate('aboutApp')),
                     onTap: () {
                       Navigator.pop(context);
                       _showAboutDialog(context, loc);
+                    },
+                  ),
+                  const Divider(height: 16),
+                  ListTile(
+                    leading: const Icon(Icons.logout_rounded, color: AppColors.error),
+                    title: Text(
+                      loc.translate('logout'),
+                      style: const TextStyle(color: AppColors.error, fontWeight: FontWeight.bold),
+                    ),
+                    onTap: () {
+                      Navigator.pop(context);
+                      _showLogoutDialog(context, loc);
                     },
                   ),
                 ],

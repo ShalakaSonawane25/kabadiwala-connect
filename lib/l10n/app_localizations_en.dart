@@ -278,4 +278,296 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get lotStatus => 'Lot Status';
+
+  @override
+  String get welcomeBack => 'Welcome back';
+
+  @override
+  String get namaste => 'Namaste 👋';
+
+  @override
+  String get loginPrompt => 'Login to continue using Kabadiwala Connect';
+
+  @override
+  String get loginSubtitle => 'Enter your mobile number to receive OTP';
+
+  @override
+  String get mobileNumber => 'Mobile Number';
+
+  @override
+  String get enterMobileNumber => 'Enter 10-digit mobile number';
+
+  @override
+  String get getOtp => 'Get OTP';
+
+  @override
+  String get demoNumberHint => 'Demo: Tap to fill demo number';
+
+  @override
+  String get validMobileError => 'Please enter a valid 10-digit mobile number';
+
+  @override
+  String get verifyMobile => 'Verify Mobile Number';
+
+  @override
+  String get otpSentTo => 'Enter the 6-digit OTP sent to';
+
+  @override
+  String get enterOtp => 'Enter 6-digit OTP';
+
+  @override
+  String get demoOtpHide => 'Demo OTP: 123456';
+
+  @override
+  String get resendOtp => 'Resend OTP';
+
+  @override
+  String get resendIn => 'Resend in';
+
+  @override
+  String get seconds => 'sec';
+
+  @override
+  String get changeNumber => 'Change Mobile Number';
+
+  @override
+  String get verifyAndContinue => 'Verify & Continue';
+
+  @override
+  String get otpMustBe6Digits => 'Please enter all 6 digits of the OTP';
+
+  @override
+  String get incorrectOtp => 'Incorrect OTP. Please try again or use 123456';
+
+  @override
+  String get completeProfile => 'Complete Your Profile';
+
+  @override
+  String get profileSetupSubtitle => 'Just a few details to get you started';
+
+  @override
+  String get fullName => 'Full Name';
+
+  @override
+  String get enterFullName => 'Enter your name (e.g. Ramesh Shinde)';
+
+  @override
+  String get nameRequiredError => 'Please enter your full name';
+
+  @override
+  String get cityArea => 'Area / City';
+
+  @override
+  String get enterCityArea => 'Enter your area or city (e.g. Pune)';
+
+  @override
+  String get cityRequiredError => 'Please enter your area or city';
+
+  @override
+  String get whatDoYouDo => 'What is your role?';
+
+  @override
+  String get scrapCollector => 'Scrap Collector';
+
+  @override
+  String get scrapCollectorDesc => 'Collects e-waste & scrap materials';
+
+  @override
+  String get recyclerRole => 'Recycler';
+
+  @override
+  String get recyclerRoleDesc => 'Authorized recycling center or partner';
+
+  @override
+  String get addPhoto => 'Add Photo';
+
+  @override
+  String get changePhoto => 'Change Photo';
+
+  @override
+  String get saveAndContinue => 'Save & Continue';
+
+  @override
+  String get welcomeOnboarding => 'Welcome to Kabadiwala Connect 👋';
+
+  @override
+  String get onboardingSubtitle =>
+      'Everything you need to manage your scrap collection in one place.';
+
+  @override
+  String get onboardingStep1Title => 'Create Scrap Lots';
+
+  @override
+  String get onboardingStep1Desc =>
+      'Record e-waste materials with weights, photos & condition.';
+
+  @override
+  String get onboardingStep2Title => 'Check Market Rates';
+
+  @override
+  String get onboardingStep2Desc =>
+      'View live & offline indicative rates with audio readout.';
+
+  @override
+  String get onboardingStep3Title => 'Find Recyclers';
+
+  @override
+  String get onboardingStep3Desc =>
+      'Locate nearby authorized recycling centers easily.';
+
+  @override
+  String get onboardingStep4Title => 'Track Earnings';
+
+  @override
+  String get onboardingStep4Desc =>
+      'Maintain an instant digital ledger of sales & payouts.';
+
+  @override
+  String get onboardingStep5Title => 'Safe QR Handover';
+
+  @override
+  String get onboardingStep5Desc =>
+      'Hand over scrap safely with verified digital QR codes.';
+
+  @override
+  String get getStarted => 'Get Started';
+
+  @override
+  String get skip => 'Skip';
+
+  @override
+  String get profile => 'Profile';
+
+  @override
+  String get editProfile => 'Edit Profile';
+
+  @override
+  String get saveChanges => 'Save Changes';
+
+  @override
+  String get profileUpdated => 'Profile updated successfully!';
+
+  @override
+  String get verifiedMobile => 'Verified Mobile';
+
+  @override
+  String get cannotEditPhone =>
+      'Mobile number is verified and linked to this account.';
+
+  @override
+  String get helpSupport => 'Help & Support';
+
+  @override
+  String get helpline => 'Kabadiwala Helpline';
+
+  @override
+  String get helplineDesc =>
+      'Toll-free collector assistance: 1800-267-3329 (9 AM - 7 PM)';
+
+  @override
+  String get callHelpline => 'Call Helpline (1800-267-3329)';
+
+  @override
+  String get logout => 'Logout';
+
+  @override
+  String get logoutConfirmTitle => 'Logout Confirmation';
+
+  @override
+  String get logoutConfirmMessage =>
+      'Are you sure you want to logout? You will need to login again with your mobile number.';
+
+  @override
+  String get cancel => 'Cancel';
+
+  @override
+  String get loggedInSuccess => 'You\'re logged in successfully.';
+
+  @override
+  String get chooseFromGallery => 'Choose from Gallery';
+
+  @override
+  String get takeCameraPhoto => 'Take Photo with Camera';
+
+  @override
+  String get removePhoto => 'Remove Photo';
+
+  @override
+  String get selectLanguage => 'Select Language';
+
+  @override
+  String get collectorRoleBadge => 'Scrap Collector';
+
+  @override
+  String get recyclerRoleBadge => 'Recycler';
+
+  @override
+  String get welcomeLandingTitle => 'Welcome to Kabadiwala Connect';
+
+  @override
+  String get welcomeLandingSubtitle =>
+      'Sell, track and manage your scrap easily.';
+
+  @override
+  String get login => 'Login';
+
+  @override
+  String get createAccount => 'Create Account';
+
+  @override
+  String get joinKabadiwala => 'Join Kabadiwala Connect';
+
+  @override
+  String get createYourAccount => 'Create your account 👋';
+
+  @override
+  String get welcomeBackLogin => 'Welcome back 👋';
+
+  @override
+  String get loginToContinue => 'Login to continue to Kabadiwala Connect';
+
+  @override
+  String get password => 'Password';
+
+  @override
+  String get enterPassword => 'Enter password';
+
+  @override
+  String get confirmPassword => 'Confirm Password';
+
+  @override
+  String get enterConfirmPassword => 'Re-enter password';
+
+  @override
+  String get showPassword => 'Show password';
+
+  @override
+  String get hidePassword => 'Hide password';
+
+  @override
+  String get passwordLengthError => 'Password must be at least 6 characters.';
+
+  @override
+  String get passwordsDoNotMatch => 'Passwords do not match.';
+
+  @override
+  String get dontHaveAccount => 'Don\'t have an account?';
+
+  @override
+  String get alreadyHaveAccount => 'Already have an account?';
+
+  @override
+  String get accountAlreadyExists =>
+      'An account with this mobile number already exists. Please login.';
+
+  @override
+  String get invalidCredentialsError =>
+      'Mobile number or password is incorrect.';
+
+  @override
+  String get signUpOtpSubtitle =>
+      'Enter the OTP sent to your mobile number to complete your registration.';
+
+  @override
+  String get verifyMobileNumber => 'Verify your mobile number';
 }

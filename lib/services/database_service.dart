@@ -10,6 +10,7 @@ import '../models/price_alert.dart';
 import '../models/recycler.dart';
 import '../models/sync_queue_item.dart';
 import '../models/transaction.dart';
+import '../models/user_profile.dart';
 
 class DatabaseException implements Exception {
   final String message;
@@ -270,6 +271,27 @@ class DatabaseService {
         triggered_at TEXT
       )
     ''');
+
+    // 10. USERS Table (Auth & Profile)
+    await db.execute('''
+      CREATE TABLE IF NOT EXISTS ${AppConstants.tableUsers} (
+        id TEXT PRIMARY KEY,
+        name TEXT NOT NULL,
+        phone_number TEXT NOT NULL,
+        password_hash TEXT,
+        city TEXT NOT NULL,
+        role TEXT NOT NULL DEFAULT 'collector',
+        photo_path TEXT,
+        is_profile_complete INTEGER NOT NULL DEFAULT 1,
+        created_at TEXT NOT NULL,
+        updated_at TEXT NOT NULL
+      )
+    ''');
+
+    // Backward-compatible column migration if table existed
+    try {
+      await db.execute('ALTER TABLE ${AppConstants.tableUsers} ADD COLUMN password_hash TEXT');
+    } catch (_) {}
   }
 
   // ==========================================
@@ -965,6 +987,141 @@ class DatabaseService {
       );
     } catch (e) {
       throw DatabaseException('Failed to delete price alert $id', e);
+    }
+  }
+
+  // ==========================================
+  // USER / AUTH OPERATIONS
+  // ==========================================
+
+  Future<void> saveUser(UserProfile user) async {
+    try {
+      final db = await database;
+      await db.execute('''
+        CREATE TABLE IF NOT EXISTS ${AppConstants.tableUsers} (
+          id TEXT PRIMARY KEY,
+          name TEXT NOT NULL,
+          phone_number TEXT NOT NULL,
+          city TEXT NOT NULL,
+          role TEXT NOT NULL DEFAULT 'collector',
+          photo_path TEXT,
+          is_profile_complete INTEGER NOT NULL DEFAULT 1,
+          created_at TEXT NOT NULL,
+          updated_at TEXT NOT NULL
+        )
+      ''');
+      await db.insert(
+        AppConstants.tableUsers,
+        user.toMap(),
+        conflictAlgorithm: ConflictAlgorithm.replace,
+      );
+    } catch (e) {
+      throw DatabaseException('Failed to save user profile: ${user.id}', e);
+    }
+  }
+
+  Future<UserProfile?> getUser(String id) async {
+    try {
+      final db = await database;
+      await db.execute('''
+        CREATE TABLE IF NOT EXISTS ${AppConstants.tableUsers} (
+          id TEXT PRIMARY KEY,
+          name TEXT NOT NULL,
+          phone_number TEXT NOT NULL,
+          city TEXT NOT NULL,
+          role TEXT NOT NULL DEFAULT 'collector',
+          photo_path TEXT,
+          is_profile_complete INTEGER NOT NULL DEFAULT 1,
+          created_at TEXT NOT NULL,
+          updated_at TEXT NOT NULL
+        )
+      ''');
+      final maps = await db.query(
+        AppConstants.tableUsers,
+        where: 'id = ?',
+        whereArgs: [id],
+      );
+      if (maps.isEmpty) return null;
+      return UserProfile.fromMap(maps.first);
+    } catch (e) {
+      throw DatabaseException('Failed to fetch user: $id', e);
+    }
+  }
+
+  Future<UserProfile?> getUserByPhone(String phoneNumber) async {
+    try {
+      final db = await database;
+      await db.execute('''
+        CREATE TABLE IF NOT EXISTS ${AppConstants.tableUsers} (
+          id TEXT PRIMARY KEY,
+          name TEXT NOT NULL,
+          phone_number TEXT NOT NULL,
+          city TEXT NOT NULL,
+          role TEXT NOT NULL DEFAULT 'collector',
+          photo_path TEXT,
+          is_profile_complete INTEGER NOT NULL DEFAULT 1,
+          created_at TEXT NOT NULL,
+          updated_at TEXT NOT NULL
+        )
+      ''');
+      
+      // Clean phone number for resilient match
+      final clean = phoneNumber.replaceAll(RegExp(r'\D'), '');
+      final maps = await db.query(AppConstants.tableUsers);
+      for (final row in maps) {
+        final rowPhone = (row['phone_number'] as String? ?? '').replaceAll(RegExp(r'\D'), '');
+        if (rowPhone == clean || (clean.length == 10 && rowPhone.endsWith(clean)) || (rowPhone.length == 10 && clean.endsWith(rowPhone))) {
+          return UserProfile.fromMap(row);
+        }
+      }
+      return null;
+    } catch (e) {
+      throw DatabaseException('Failed to fetch user by phone: $phoneNumber', e);
+    }
+  }
+
+  Future<UserProfile?> getCurrentUser() async {
+    try {
+      final currentUserId = await getSetting('current_user_id');
+      if (currentUserId != null && currentUserId.isNotEmpty) {
+        return await getUser(currentUserId);
+      }
+      return null;
+    } catch (e) {
+      throw DatabaseException('Failed to fetch current user', e);
+    }
+  }
+
+  Future<void> setCurrentUserId(String? userId) async {
+    try {
+      if (userId == null) {
+        await saveSetting('current_user_id', '');
+      } else {
+        await saveSetting('current_user_id', userId);
+      }
+    } catch (e) {
+      throw DatabaseException('Failed to set current user ID', e);
+    }
+  }
+
+  Future<void> clearAuthSession() async {
+    await setCurrentUserId(null);
+  }
+
+  Future<void> deleteUser(String id) async {
+    try {
+      final db = await database;
+      await db.delete(
+        AppConstants.tableUsers,
+        where: 'id = ?',
+        whereArgs: [id],
+      );
+      final currentUserId = await getSetting('current_user_id');
+      if (currentUserId == id) {
+        await clearAuthSession();
+      }
+    } catch (e) {
+      throw DatabaseException('Failed to delete user: $id', e);
     }
   }
 }

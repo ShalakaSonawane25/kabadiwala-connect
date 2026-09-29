@@ -15,6 +15,7 @@ class AppConstants {
   static const String tableHandovers = 'handovers';
   static const String tableNotifications = 'notifications';
   static const String tablePriceAlerts = 'price_alerts';
+  static const String tableUsers = 'users';
 
   // Sync States
   static const String syncPending = 'PENDING_SYNC';

@@ -279,4 +279,296 @@ class AppLocalizationsMr extends AppLocalizations {
 
   @override
   String get lotStatus => 'मालाची स्थिती';
+
+  @override
+  String get welcomeBack => 'पुन्हा स्वागत आहे';
+
+  @override
+  String get namaste => 'नमस्ते 👋';
+
+  @override
+  String get loginPrompt =>
+      'कबाडीवाला कनेक्ट वापरणे सुरू ठेवण्यासाठी लॉगिन करा';
+
+  @override
+  String get loginSubtitle => 'ओटीपी मिळवण्यासाठी तुमचा मोबाइल नंबर टाका';
+
+  @override
+  String get mobileNumber => 'मोबाइल नंबर';
+
+  @override
+  String get enterMobileNumber => '10-अंकी मोबाइल नंबर टाका';
+
+  @override
+  String get getOtp => 'ओटीपी मिळवा';
+
+  @override
+  String get demoNumberHint => 'डेमो: डेमो नंबर भरण्यासाठी टॅप करा';
+
+  @override
+  String get validMobileError => 'कृपया वैध 10-अंकी मोबाइल नंबर टाका';
+
+  @override
+  String get verifyMobile => 'मोबाइल नंबर पडताळा';
+
+  @override
+  String get otpSentTo => 'या क्रमांकावर पाठवलेला 6-अंकी ओटीपी टाका:';
+
+  @override
+  String get enterOtp => '6-अंकी ओटीपी टाका';
+
+  @override
+  String get demoOtpHide => 'डेमो ओटीपी: 123456';
+
+  @override
+  String get resendOtp => 'ओटीपी पुन्हा पाठवा';
+
+  @override
+  String get resendIn => 'पुन्हा पाठवा';
+
+  @override
+  String get seconds => 'सेकंद';
+
+  @override
+  String get changeNumber => 'मोबाइल नंबर बदला';
+
+  @override
+  String get verifyAndContinue => 'पडताळा आणि पुढे जा';
+
+  @override
+  String get otpMustBe6Digits => 'कृपया ओटीपीचे सर्व 6 अंक टाका';
+
+  @override
+  String get incorrectOtp =>
+      'चुकीचा ओटीपी. कृपया पुन्हा प्रयत्न करा किंवा 123456 वापरा';
+
+  @override
+  String get completeProfile => 'तुमचे प्रोफाइल पूर्ण करा';
+
+  @override
+  String get profileSetupSubtitle => 'सुरू करण्यासाठी फक्त काही मूलभूत माहिती';
+
+  @override
+  String get fullName => 'पूर्ण नाव';
+
+  @override
+  String get enterFullName => 'तुमचे नाव टाका (उदा. रमेश शिंदे)';
+
+  @override
+  String get nameRequiredError => 'कृपया तुमचे पूर्ण नाव टाका';
+
+  @override
+  String get cityArea => 'परिसर / शहर';
+
+  @override
+  String get enterCityArea => 'तुमचा परिसर किंवा शहर टाका (उदा. पुणे)';
+
+  @override
+  String get cityRequiredError => 'कृपया तुमचा परिसर किंवा शहर टाका';
+
+  @override
+  String get whatDoYouDo => 'तुमची भूमिका काय आहे?';
+
+  @override
+  String get scrapCollector => 'भंगार वेचक / संग्राहक';
+
+  @override
+  String get scrapCollectorDesc => 'ई-कचरा आणि भंगार माल गोळा करतो';
+
+  @override
+  String get recyclerRole => 'रिसायकलर';
+
+  @override
+  String get recyclerRoleDesc => 'अधिकृत रिसायकलिंग केंद्र किंवा भागीदार';
+
+  @override
+  String get addPhoto => 'फोटो जोडा';
+
+  @override
+  String get changePhoto => 'फोटो बदला';
+
+  @override
+  String get saveAndContinue => 'जतन करा आणि पुढे जा';
+
+  @override
+  String get welcomeOnboarding => 'कबाडीवाला कनेक्ट मध्ये आपले स्वागत आहे 👋';
+
+  @override
+  String get onboardingSubtitle =>
+      'तुमच्या भंगार संकलनाचे व्यवस्थापन करण्यासाठी सर्व काही एकाच ठिकाणी.';
+
+  @override
+  String get onboardingStep1Title => 'मालाची नोंद करा';
+
+  @override
+  String get onboardingStep1Desc =>
+      'वजन, फोटो आणि स्थितीसह ई-कचरा मालाची नोंद करा.';
+
+  @override
+  String get onboardingStep2Title => 'बाजार दर तपासा';
+
+  @override
+  String get onboardingStep2Desc => 'ऑडिओ वाचनासह थेट आणि ऑफलाइन बाजार दर पहा.';
+
+  @override
+  String get onboardingStep3Title => 'रिसायकलर शोधा';
+
+  @override
+  String get onboardingStep3Desc =>
+      'जवळच्या अधिकृत रिसायकलर्सशी सहज संपर्क साधा.';
+
+  @override
+  String get onboardingStep4Title => 'कमाईचा हिशोब ठेवा';
+
+  @override
+  String get onboardingStep4Desc =>
+      'सर्व व्यवहार आणि कमाईची त्वरित डिजिटल नोंद ठेवा.';
+
+  @override
+  String get onboardingStep5Title => 'सुरक्षित क्यूआर हस्तांतरण';
+
+  @override
+  String get onboardingStep5Desc =>
+      'पडताळणी केलेल्या डिजिटल क्यूआर कोडसह माल सुरक्षितपणे हस्तांतरित करा.';
+
+  @override
+  String get getStarted => 'सुरू करा';
+
+  @override
+  String get skip => 'वगळा';
+
+  @override
+  String get profile => 'प्रोफाइल';
+
+  @override
+  String get editProfile => 'प्रोफाइल संपादित करा';
+
+  @override
+  String get saveChanges => 'बदल जतन करा';
+
+  @override
+  String get profileUpdated => 'प्रोफाइल यशस्वीरित्या अपडेट झाली!';
+
+  @override
+  String get verifiedMobile => 'पडताळलेला मोबाइल';
+
+  @override
+  String get cannotEditPhone =>
+      'मोबाइल नंबर पडताळलेला आहे आणि या खात्याशी जोडलेला आहे.';
+
+  @override
+  String get helpSupport => 'मदत आणि सहकार्य';
+
+  @override
+  String get helpline => 'कबाडीवाला हेल्पलाइन';
+
+  @override
+  String get helplineDesc =>
+      'टोल-फ्री कलेक्टर मदत: 1800-267-3329 (सकाळी 9 ते संध्याकाळी 7)';
+
+  @override
+  String get callHelpline => 'हेल्पलाइनवर कॉल करा (1800-267-3329)';
+
+  @override
+  String get logout => 'लॉगआउट';
+
+  @override
+  String get logoutConfirmTitle => 'लॉगआउटची खात्री';
+
+  @override
+  String get logoutConfirmMessage =>
+      'तुम्हाला खात्री आहे की तुम्ही लॉगआउट करू इच्छिता? पुन्हा लॉगिन करण्यासाठी तुम्हाला तुमच्या मोबाइल नंबरची आवश्यकता असेल.';
+
+  @override
+  String get cancel => 'रद्द करा';
+
+  @override
+  String get loggedInSuccess => 'तुम्ही यशस्वीरित्या लॉगिन झाला आहात.';
+
+  @override
+  String get chooseFromGallery => 'गॅलरीतून निवडा';
+
+  @override
+  String get takeCameraPhoto => 'कॅमेऱ्याने फोटो काढा';
+
+  @override
+  String get removePhoto => 'फोटो काढा';
+
+  @override
+  String get selectLanguage => 'भाषा निवडा';
+
+  @override
+  String get collectorRoleBadge => 'भंगार वेचक / संग्राहक';
+
+  @override
+  String get recyclerRoleBadge => 'रिसायकलर';
+
+  @override
+  String get welcomeLandingTitle => 'कबाडीवाला कनेक्ट मध्ये आपले स्वागत आहे';
+
+  @override
+  String get welcomeLandingSubtitle =>
+      'तुमचा भंगार सहजपणे विका, मागोवा घ्या आणि व्यवस्थापित करा.';
+
+  @override
+  String get login => 'लॉगिन करा';
+
+  @override
+  String get createAccount => 'खाते तयार करा';
+
+  @override
+  String get joinKabadiwala => 'कबाडीवाला कनेक्ट मध्ये सामील व्हा';
+
+  @override
+  String get createYourAccount => 'आपले खाते तयार करा 👋';
+
+  @override
+  String get welcomeBackLogin => 'परत स्वागत आहे 👋';
+
+  @override
+  String get loginToContinue => 'कबाडीवाला कनेक्ट सुरू ठेवण्यासाठी लॉगिन करा';
+
+  @override
+  String get password => 'पासवर्ड';
+
+  @override
+  String get enterPassword => 'पासवर्ड प्रविष्ट करा';
+
+  @override
+  String get confirmPassword => 'पासवर्डची पुष्टी करा';
+
+  @override
+  String get enterConfirmPassword => 'पासवर्ड पुन्हा प्रविष्ट करा';
+
+  @override
+  String get showPassword => 'पासवर्ड दाखवा';
+
+  @override
+  String get hidePassword => 'पासवर्ड लपवा';
+
+  @override
+  String get passwordLengthError => 'पासवर्ड किमान 6 अक्षरांचा असावा.';
+
+  @override
+  String get passwordsDoNotMatch => 'पासवर्ड जुळत नाहीत.';
+
+  @override
+  String get dontHaveAccount => 'खाते नाही का?';
+
+  @override
+  String get alreadyHaveAccount => 'आधीच खाते आहे का?';
+
+  @override
+  String get accountAlreadyExists =>
+      'या मोबाइल नंबरचे खाते आधीपासून अस्तित्वात आहे. कृपया लॉगिन करा.';
+
+  @override
+  String get invalidCredentialsError => 'मोबाइल नंबर किंवा पासवर्ड चुकीचा आहे.';
+
+  @override
+  String get signUpOtpSubtitle =>
+      'तुमची नोंदणी पूर्ण करण्यासाठी तुमच्या मोबाइल नंबरवर पाठवलेला OTP प्रविष्ट करा.';
+
+  @override
+  String get verifyMobileNumber => 'तुमचा मोबाइल नंबर पडताळा';
 }

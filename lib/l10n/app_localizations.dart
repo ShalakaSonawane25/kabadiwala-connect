@@ -639,6 +639,564 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Lot Status'**
   String get lotStatus;
+
+  /// No description provided for @welcomeBack.
+  ///
+  /// In en, this message translates to:
+  /// **'Welcome back'**
+  String get welcomeBack;
+
+  /// No description provided for @namaste.
+  ///
+  /// In en, this message translates to:
+  /// **'Namaste 👋'**
+  String get namaste;
+
+  /// No description provided for @loginPrompt.
+  ///
+  /// In en, this message translates to:
+  /// **'Login to continue using Kabadiwala Connect'**
+  String get loginPrompt;
+
+  /// No description provided for @loginSubtitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Enter your mobile number to receive OTP'**
+  String get loginSubtitle;
+
+  /// No description provided for @mobileNumber.
+  ///
+  /// In en, this message translates to:
+  /// **'Mobile Number'**
+  String get mobileNumber;
+
+  /// No description provided for @enterMobileNumber.
+  ///
+  /// In en, this message translates to:
+  /// **'Enter 10-digit mobile number'**
+  String get enterMobileNumber;
+
+  /// No description provided for @getOtp.
+  ///
+  /// In en, this message translates to:
+  /// **'Get OTP'**
+  String get getOtp;
+
+  /// No description provided for @demoNumberHint.
+  ///
+  /// In en, this message translates to:
+  /// **'Demo: Tap to fill demo number'**
+  String get demoNumberHint;
+
+  /// No description provided for @validMobileError.
+  ///
+  /// In en, this message translates to:
+  /// **'Please enter a valid 10-digit mobile number'**
+  String get validMobileError;
+
+  /// No description provided for @verifyMobile.
+  ///
+  /// In en, this message translates to:
+  /// **'Verify Mobile Number'**
+  String get verifyMobile;
+
+  /// No description provided for @otpSentTo.
+  ///
+  /// In en, this message translates to:
+  /// **'Enter the 6-digit OTP sent to'**
+  String get otpSentTo;
+
+  /// No description provided for @enterOtp.
+  ///
+  /// In en, this message translates to:
+  /// **'Enter 6-digit OTP'**
+  String get enterOtp;
+
+  /// No description provided for @demoOtpHide.
+  ///
+  /// In en, this message translates to:
+  /// **'Demo OTP: 123456'**
+  String get demoOtpHide;
+
+  /// No description provided for @resendOtp.
+  ///
+  /// In en, this message translates to:
+  /// **'Resend OTP'**
+  String get resendOtp;
+
+  /// No description provided for @resendIn.
+  ///
+  /// In en, this message translates to:
+  /// **'Resend in'**
+  String get resendIn;
+
+  /// No description provided for @seconds.
+  ///
+  /// In en, this message translates to:
+  /// **'sec'**
+  String get seconds;
+
+  /// No description provided for @changeNumber.
+  ///
+  /// In en, this message translates to:
+  /// **'Change Mobile Number'**
+  String get changeNumber;
+
+  /// No description provided for @verifyAndContinue.
+  ///
+  /// In en, this message translates to:
+  /// **'Verify & Continue'**
+  String get verifyAndContinue;
+
+  /// No description provided for @otpMustBe6Digits.
+  ///
+  /// In en, this message translates to:
+  /// **'Please enter all 6 digits of the OTP'**
+  String get otpMustBe6Digits;
+
+  /// No description provided for @incorrectOtp.
+  ///
+  /// In en, this message translates to:
+  /// **'Incorrect OTP. Please try again or use 123456'**
+  String get incorrectOtp;
+
+  /// No description provided for @completeProfile.
+  ///
+  /// In en, this message translates to:
+  /// **'Complete Your Profile'**
+  String get completeProfile;
+
+  /// No description provided for @profileSetupSubtitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Just a few details to get you started'**
+  String get profileSetupSubtitle;
+
+  /// No description provided for @fullName.
+  ///
+  /// In en, this message translates to:
+  /// **'Full Name'**
+  String get fullName;
+
+  /// No description provided for @enterFullName.
+  ///
+  /// In en, this message translates to:
+  /// **'Enter your name (e.g. Ramesh Shinde)'**
+  String get enterFullName;
+
+  /// No description provided for @nameRequiredError.
+  ///
+  /// In en, this message translates to:
+  /// **'Please enter your full name'**
+  String get nameRequiredError;
+
+  /// No description provided for @cityArea.
+  ///
+  /// In en, this message translates to:
+  /// **'Area / City'**
+  String get cityArea;
+
+  /// No description provided for @enterCityArea.
+  ///
+  /// In en, this message translates to:
+  /// **'Enter your area or city (e.g. Pune)'**
+  String get enterCityArea;
+
+  /// No description provided for @cityRequiredError.
+  ///
+  /// In en, this message translates to:
+  /// **'Please enter your area or city'**
+  String get cityRequiredError;
+
+  /// No description provided for @whatDoYouDo.
+  ///
+  /// In en, this message translates to:
+  /// **'What is your role?'**
+  String get whatDoYouDo;
+
+  /// No description provided for @scrapCollector.
+  ///
+  /// In en, this message translates to:
+  /// **'Scrap Collector'**
+  String get scrapCollector;
+
+  /// No description provided for @scrapCollectorDesc.
+  ///
+  /// In en, this message translates to:
+  /// **'Collects e-waste & scrap materials'**
+  String get scrapCollectorDesc;
+
+  /// No description provided for @recyclerRole.
+  ///
+  /// In en, this message translates to:
+  /// **'Recycler'**
+  String get recyclerRole;
+
+  /// No description provided for @recyclerRoleDesc.
+  ///
+  /// In en, this message translates to:
+  /// **'Authorized recycling center or partner'**
+  String get recyclerRoleDesc;
+
+  /// No description provided for @addPhoto.
+  ///
+  /// In en, this message translates to:
+  /// **'Add Photo'**
+  String get addPhoto;
+
+  /// No description provided for @changePhoto.
+  ///
+  /// In en, this message translates to:
+  /// **'Change Photo'**
+  String get changePhoto;
+
+  /// No description provided for @saveAndContinue.
+  ///
+  /// In en, this message translates to:
+  /// **'Save & Continue'**
+  String get saveAndContinue;
+
+  /// No description provided for @welcomeOnboarding.
+  ///
+  /// In en, this message translates to:
+  /// **'Welcome to Kabadiwala Connect 👋'**
+  String get welcomeOnboarding;
+
+  /// No description provided for @onboardingSubtitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Everything you need to manage your scrap collection in one place.'**
+  String get onboardingSubtitle;
+
+  /// No description provided for @onboardingStep1Title.
+  ///
+  /// In en, this message translates to:
+  /// **'Create Scrap Lots'**
+  String get onboardingStep1Title;
+
+  /// No description provided for @onboardingStep1Desc.
+  ///
+  /// In en, this message translates to:
+  /// **'Record e-waste materials with weights, photos & condition.'**
+  String get onboardingStep1Desc;
+
+  /// No description provided for @onboardingStep2Title.
+  ///
+  /// In en, this message translates to:
+  /// **'Check Market Rates'**
+  String get onboardingStep2Title;
+
+  /// No description provided for @onboardingStep2Desc.
+  ///
+  /// In en, this message translates to:
+  /// **'View live & offline indicative rates with audio readout.'**
+  String get onboardingStep2Desc;
+
+  /// No description provided for @onboardingStep3Title.
+  ///
+  /// In en, this message translates to:
+  /// **'Find Recyclers'**
+  String get onboardingStep3Title;
+
+  /// No description provided for @onboardingStep3Desc.
+  ///
+  /// In en, this message translates to:
+  /// **'Locate nearby authorized recycling centers easily.'**
+  String get onboardingStep3Desc;
+
+  /// No description provided for @onboardingStep4Title.
+  ///
+  /// In en, this message translates to:
+  /// **'Track Earnings'**
+  String get onboardingStep4Title;
+
+  /// No description provided for @onboardingStep4Desc.
+  ///
+  /// In en, this message translates to:
+  /// **'Maintain an instant digital ledger of sales & payouts.'**
+  String get onboardingStep4Desc;
+
+  /// No description provided for @onboardingStep5Title.
+  ///
+  /// In en, this message translates to:
+  /// **'Safe QR Handover'**
+  String get onboardingStep5Title;
+
+  /// No description provided for @onboardingStep5Desc.
+  ///
+  /// In en, this message translates to:
+  /// **'Hand over scrap safely with verified digital QR codes.'**
+  String get onboardingStep5Desc;
+
+  /// No description provided for @getStarted.
+  ///
+  /// In en, this message translates to:
+  /// **'Get Started'**
+  String get getStarted;
+
+  /// No description provided for @skip.
+  ///
+  /// In en, this message translates to:
+  /// **'Skip'**
+  String get skip;
+
+  /// No description provided for @profile.
+  ///
+  /// In en, this message translates to:
+  /// **'Profile'**
+  String get profile;
+
+  /// No description provided for @editProfile.
+  ///
+  /// In en, this message translates to:
+  /// **'Edit Profile'**
+  String get editProfile;
+
+  /// No description provided for @saveChanges.
+  ///
+  /// In en, this message translates to:
+  /// **'Save Changes'**
+  String get saveChanges;
+
+  /// No description provided for @profileUpdated.
+  ///
+  /// In en, this message translates to:
+  /// **'Profile updated successfully!'**
+  String get profileUpdated;
+
+  /// No description provided for @verifiedMobile.
+  ///
+  /// In en, this message translates to:
+  /// **'Verified Mobile'**
+  String get verifiedMobile;
+
+  /// No description provided for @cannotEditPhone.
+  ///
+  /// In en, this message translates to:
+  /// **'Mobile number is verified and linked to this account.'**
+  String get cannotEditPhone;
+
+  /// No description provided for @helpSupport.
+  ///
+  /// In en, this message translates to:
+  /// **'Help & Support'**
+  String get helpSupport;
+
+  /// No description provided for @helpline.
+  ///
+  /// In en, this message translates to:
+  /// **'Kabadiwala Helpline'**
+  String get helpline;
+
+  /// No description provided for @helplineDesc.
+  ///
+  /// In en, this message translates to:
+  /// **'Toll-free collector assistance: 1800-267-3329 (9 AM - 7 PM)'**
+  String get helplineDesc;
+
+  /// No description provided for @callHelpline.
+  ///
+  /// In en, this message translates to:
+  /// **'Call Helpline (1800-267-3329)'**
+  String get callHelpline;
+
+  /// No description provided for @logout.
+  ///
+  /// In en, this message translates to:
+  /// **'Logout'**
+  String get logout;
+
+  /// No description provided for @logoutConfirmTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Logout Confirmation'**
+  String get logoutConfirmTitle;
+
+  /// No description provided for @logoutConfirmMessage.
+  ///
+  /// In en, this message translates to:
+  /// **'Are you sure you want to logout? You will need to login again with your mobile number.'**
+  String get logoutConfirmMessage;
+
+  /// No description provided for @cancel.
+  ///
+  /// In en, this message translates to:
+  /// **'Cancel'**
+  String get cancel;
+
+  /// No description provided for @loggedInSuccess.
+  ///
+  /// In en, this message translates to:
+  /// **'You\'re logged in successfully.'**
+  String get loggedInSuccess;
+
+  /// No description provided for @chooseFromGallery.
+  ///
+  /// In en, this message translates to:
+  /// **'Choose from Gallery'**
+  String get chooseFromGallery;
+
+  /// No description provided for @takeCameraPhoto.
+  ///
+  /// In en, this message translates to:
+  /// **'Take Photo with Camera'**
+  String get takeCameraPhoto;
+
+  /// No description provided for @removePhoto.
+  ///
+  /// In en, this message translates to:
+  /// **'Remove Photo'**
+  String get removePhoto;
+
+  /// No description provided for @selectLanguage.
+  ///
+  /// In en, this message translates to:
+  /// **'Select Language'**
+  String get selectLanguage;
+
+  /// No description provided for @collectorRoleBadge.
+  ///
+  /// In en, this message translates to:
+  /// **'Scrap Collector'**
+  String get collectorRoleBadge;
+
+  /// No description provided for @recyclerRoleBadge.
+  ///
+  /// In en, this message translates to:
+  /// **'Recycler'**
+  String get recyclerRoleBadge;
+
+  /// No description provided for @welcomeLandingTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Welcome to Kabadiwala Connect'**
+  String get welcomeLandingTitle;
+
+  /// No description provided for @welcomeLandingSubtitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Sell, track and manage your scrap easily.'**
+  String get welcomeLandingSubtitle;
+
+  /// No description provided for @login.
+  ///
+  /// In en, this message translates to:
+  /// **'Login'**
+  String get login;
+
+  /// No description provided for @createAccount.
+  ///
+  /// In en, this message translates to:
+  /// **'Create Account'**
+  String get createAccount;
+
+  /// No description provided for @joinKabadiwala.
+  ///
+  /// In en, this message translates to:
+  /// **'Join Kabadiwala Connect'**
+  String get joinKabadiwala;
+
+  /// No description provided for @createYourAccount.
+  ///
+  /// In en, this message translates to:
+  /// **'Create your account 👋'**
+  String get createYourAccount;
+
+  /// No description provided for @welcomeBackLogin.
+  ///
+  /// In en, this message translates to:
+  /// **'Welcome back 👋'**
+  String get welcomeBackLogin;
+
+  /// No description provided for @loginToContinue.
+  ///
+  /// In en, this message translates to:
+  /// **'Login to continue to Kabadiwala Connect'**
+  String get loginToContinue;
+
+  /// No description provided for @password.
+  ///
+  /// In en, this message translates to:
+  /// **'Password'**
+  String get password;
+
+  /// No description provided for @enterPassword.
+  ///
+  /// In en, this message translates to:
+  /// **'Enter password'**
+  String get enterPassword;
+
+  /// No description provided for @confirmPassword.
+  ///
+  /// In en, this message translates to:
+  /// **'Confirm Password'**
+  String get confirmPassword;
+
+  /// No description provided for @enterConfirmPassword.
+  ///
+  /// In en, this message translates to:
+  /// **'Re-enter password'**
+  String get enterConfirmPassword;
+
+  /// No description provided for @showPassword.
+  ///
+  /// In en, this message translates to:
+  /// **'Show password'**
+  String get showPassword;
+
+  /// No description provided for @hidePassword.
+  ///
+  /// In en, this message translates to:
+  /// **'Hide password'**
+  String get hidePassword;
+
+  /// No description provided for @passwordLengthError.
+  ///
+  /// In en, this message translates to:
+  /// **'Password must be at least 6 characters.'**
+  String get passwordLengthError;
+
+  /// No description provided for @passwordsDoNotMatch.
+  ///
+  /// In en, this message translates to:
+  /// **'Passwords do not match.'**
+  String get passwordsDoNotMatch;
+
+  /// No description provided for @dontHaveAccount.
+  ///
+  /// In en, this message translates to:
+  /// **'Don\'t have an account?'**
+  String get dontHaveAccount;
+
+  /// No description provided for @alreadyHaveAccount.
+  ///
+  /// In en, this message translates to:
+  /// **'Already have an account?'**
+  String get alreadyHaveAccount;
+
+  /// No description provided for @accountAlreadyExists.
+  ///
+  /// In en, this message translates to:
+  /// **'An account with this mobile number already exists. Please login.'**
+  String get accountAlreadyExists;
+
+  /// No description provided for @invalidCredentialsError.
+  ///
+  /// In en, this message translates to:
+  /// **'Mobile number or password is incorrect.'**
+  String get invalidCredentialsError;
+
+  /// No description provided for @signUpOtpSubtitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Enter the OTP sent to your mobile number to complete your registration.'**
+  String get signUpOtpSubtitle;
+
+  /// No description provided for @verifyMobileNumber.
+  ///
+  /// In en, this message translates to:
+  /// **'Verify your mobile number'**
+  String get verifyMobileNumber;
 }
 
 class _AppLocalizationsDelegate

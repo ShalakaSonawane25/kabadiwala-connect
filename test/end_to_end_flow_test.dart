@@ -1,14 +1,17 @@
 import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
+import 'package:kabadiwala_connect/core/auth/auth_controller.dart';
 import 'package:kabadiwala_connect/core/constants/app_constants.dart';
 import 'package:kabadiwala_connect/core/localization/locale_controller.dart';
 import 'package:kabadiwala_connect/models/price.dart';
+import 'package:kabadiwala_connect/models/user_profile.dart';
 import 'package:kabadiwala_connect/repositories/lot_repository.dart';
 import 'package:kabadiwala_connect/repositories/price_repository.dart';
 import 'package:kabadiwala_connect/repositories/transaction_repository.dart';
 import 'package:kabadiwala_connect/services/api_service.dart';
 import 'package:kabadiwala_connect/services/audio_service.dart';
+import 'package:kabadiwala_connect/services/auth_service.dart';
 import 'package:kabadiwala_connect/services/connectivity_service.dart';
 import 'package:kabadiwala_connect/services/database_service.dart';
 import 'package:kabadiwala_connect/services/sync_service.dart';
@@ -30,6 +33,8 @@ void main() {
   late PriceRepository priceRepository;
   late AudioService audioService;
   late LocaleController localeController;
+  late AuthService authService;
+  late AuthController authController;
 
   setUp(() async {
     tempDir = await Directory.systemTemp.createTemp('sih26_e2e_test_');
@@ -67,6 +72,23 @@ void main() {
 
     localeController = LocaleController(dbService: dbService);
     await localeController.initialize();
+
+    authService = AuthService(dbService: dbService);
+    authController = AuthController(authService: authService);
+
+    // Pre-authenticate for end-to-end collector workflow tests
+    final user = UserProfile(
+      id: 'test-user-e2e',
+      phoneNumber: '+919876543210',
+      name: 'Ramesh Kumar',
+      city: 'Pune',
+      role: 'collector',
+      createdAt: DateTime.now(),
+      updatedAt: DateTime.now(),
+    );
+    await dbService.saveUser(user);
+    await dbService.setCurrentUserId(user.id);
+    await authController.initialize();
   });
 
   tearDown(() async {
@@ -87,6 +109,7 @@ void main() {
       priceRepository: priceRepository,
       syncService: syncService,
       connectivityService: connectivity,
+      authController: authController,
     );
   }
 
